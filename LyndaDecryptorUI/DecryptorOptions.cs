@@ -11,6 +11,6 @@
         public string OutputPath { get; set; }
         public string OutputFolder { get; set; }
         public string DatabasePath { get; set; }
-				public bool SubTitle { get; set; }
+        public bool SubTitle { get; set; }
     }
 }

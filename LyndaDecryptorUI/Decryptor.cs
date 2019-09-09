@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -37,16 +36,16 @@ namespace LyndaDecryptorUI
         // Decryptor Options
         public DecryptorOptions Options = new DecryptorOptions();
 
-				//Progress
-				int FilesCompleted = 0, TotalFiles = 0;
-				IProgress<int> ProgressPercent = null;
+        //Progress
+        int FilesCompleted = 0, TotalFiles = 0;
+        IProgress<int> ProgressPercent = null;
 
-				//Cancellation
-				CancellationToken ct;
+        //Cancellation
+        CancellationToken ct;
 
-				#endregion
+        #endregion
 
-				public Decryptor()
+        public Decryptor()
         {
             InvalidPathCharacters.AddRange(Path.GetInvalidPathChars());
             InvalidPathCharacters.AddRange(new char[] { ':', '?', '"', '\\', '/' });
@@ -67,9 +66,9 @@ namespace LyndaDecryptorUI
             if (options.UseDatabase)
                 Options.UseDatabase = InitDB(options.DatabasePath);
 
-						ProgressPercent = pp;
-						ct = token;
-				}
+                        ProgressPercent = pp;
+                        ct = token;
+                }
 
         #region Methods
 
@@ -146,9 +145,9 @@ namespace LyndaDecryptorUI
             IEnumerable<string> files = Directory.EnumerateFiles(folderPath, "*.lynda", SearchOption.AllDirectories)
                                 .Concat(Directory.EnumerateFiles(folderPath, "*.ldcw", SearchOption.AllDirectories));
 
-						TotalFiles = files.Count();
+            TotalFiles = files.Count();
 
-						foreach (string entry in files)
+            foreach (string entry in files)
             {
                 string newPath = string.Empty;
                 string item = entry;
@@ -171,12 +170,12 @@ namespace LyndaDecryptorUI
                             simpleTitle = $"{VideoPrefix}.mp4";
 
                             newPath = Path.Combine(OutputDirectory.FullName, CleanPath(videoInfo.CourseTitle),
-																CleanPath(videoInfo.ChapterTitle), CleanPath(complexTitle));
+                                                                CleanPath(videoInfo.ChapterTitle), CleanPath(complexTitle));
 
                             if (newPath.Length > 240)
                             {
                                 newPath = Path.Combine(OutputDirectory.FullName, CleanPath(videoInfo.CourseTitle),
-																		CleanPath(videoInfo.ChapterTitle), CleanPath(simpleTitle));
+                                            CleanPath(videoInfo.ChapterTitle), CleanPath(simpleTitle));
                             }
 
                             if (!Directory.Exists(Path.GetDirectoryName(newPath)))
@@ -198,17 +197,18 @@ namespace LyndaDecryptorUI
 
                 TaskList.Add(Task.Run(() =>
                 {
-										ct.ThrowIfCancellationRequested();
+                    ct.ThrowIfCancellationRequested();
 
-										Decrypt(item, newPath);
+                    Decrypt(item, newPath);
 
-										if(Options.SubTitle == true)
-												ConvertSub(item, newPath, Options.RemoveFilesAfterDecryption);
+                    if(Options.SubTitle == true)
+                        ConvertSub(item, newPath, Options.RemoveFilesAfterDecryption);
 
                     lock (SemaphoreLock)
                     {
                         Semaphore.Release();
                     }
+
                 },ct));
             }
             
@@ -226,14 +226,14 @@ namespace LyndaDecryptorUI
         /// <param name="removeOldFile">Remove encrypted file after decryption?</param>
         public void Decrypt(string encryptedFilePath, string decryptedFilePath)
         {
-						//Cancellation already requested?
-						if (ct.IsCancellationRequested)
-						{
-								WriteToConsole("[CAN] Task cancellation requested....", Color.Red);
-								ct.ThrowIfCancellationRequested();
-						}
+            //Cancellation already requested?
+            if (ct.IsCancellationRequested)
+            {
+                    WriteToConsole("[CAN] Task cancellation requested....", Color.Red);
+                    ct.ThrowIfCancellationRequested();
+            }
 
-						if (!File.Exists(encryptedFilePath))
+            if (!File.Exists(encryptedFilePath))
             {
                 WriteToConsole("[ERR] Couldn't find encrypted file...", Color.Red);
                 return;
@@ -266,117 +266,114 @@ namespace LyndaDecryptorUI
                 return;
             }
 
-						
-						if (encryptedFileInfo.Extension == ".lynda")
-						{
-								using (var inStream = new FileStream(encryptedFilePath, FileMode.Open))
-								{
-										using (var decryptionStream = new CryptoStream(inStream, RijndaelInstace.CreateDecryptor(KeyBytes, KeyBytes), CryptoStreamMode.Read))
-										{
-												using (var outStream = new FileStream(decryptedFilePath, FileMode.Create))
-												{
-														WriteToConsole("[DEC] Decrypting file " + encryptedFileInfo.Name + "...");
+                        
+            if (encryptedFileInfo.Extension == ".lynda")
+            {
+                using (var inStream = new FileStream(encryptedFilePath, FileMode.Open))
+                {
+                    using (var decryptionStream = new CryptoStream(inStream, RijndaelInstace.CreateDecryptor(KeyBytes, KeyBytes), CryptoStreamMode.Read))
+                    {
+                        using (var outStream = new FileStream(decryptedFilePath, FileMode.Create))
+                        {
+                            WriteToConsole("[DEC] Decrypting file " + encryptedFileInfo.Name + "...");
 
-														while ((inStream.Length - inStream.Position) >= buffer.Length)
-														{
-																if (ct.IsCancellationRequested)
-																{
-																		WriteToConsole("[CAN] Cancelling Task: " + Path.GetFileName(decryptedFilePath), Color.Red);
-																				
-																		outStream.Flush();
-																		outStream.Close();
-																		inStream.Close();
-																		buffer = null;
+                            while ((inStream.Length - inStream.Position) >= buffer.Length)
+                            {
+                                if (ct.IsCancellationRequested)
+                                {
+                                    WriteToConsole("[CAN] Cancelling Task: " + Path.GetFileName(decryptedFilePath), Color.Red);
+                                        
+                                    outStream.Flush();
+                                    outStream.Close();
+                                    inStream.Close();
+                                    buffer = null;
+                                }
 
-																		//throw new TaskCanceledException();
-																}
+                                decryptionStream.Read(buffer, 0, buffer.Length);
+                                outStream.Write(buffer, 0, buffer.Length);
+                            }
 
-																decryptionStream.Read(buffer, 0, buffer.Length);
-																outStream.Write(buffer, 0, buffer.Length);
-														}
+                            buffer = new byte[inStream.Length - inStream.Position];
+                            decryptionStream.Read(buffer, 0, buffer.Length);
+                            outStream.Write(buffer, 0, buffer.Length);
+                            outStream.Flush();
+                            outStream.Close();
 
-														buffer = new byte[inStream.Length - inStream.Position];
-														decryptionStream.Read(buffer, 0, buffer.Length);
-														outStream.Write(buffer, 0, buffer.Length);
-														outStream.Flush();
-														outStream.Close();
+                            WriteToConsole("[DEC] File decryption completed: " + decryptedFilePath, Color.DarkGreen);
+                        }
+                    }
 
-														WriteToConsole("[DEC] File decryption completed: " + decryptedFilePath, Color.DarkGreen);
-												}
-										}
+                    inStream.Close();
+                    buffer = null;
+                }
 
-										inStream.Close();
-										buffer = null;
-								}
+                if (ProgressPercent != null)
+                {
+                    FilesCompleted++;
+                    int percent = FilesCompleted * 100 / TotalFiles;
+                    ProgressPercent.Report(percent);
+                }
+            }
 
-								if (ProgressPercent != null)
-								{
-										FilesCompleted++;
-										int percent = FilesCompleted * 100 / TotalFiles;
-										ProgressPercent.Report(percent);
-								}
-						}
+            else if (encryptedFileInfo.Extension == ".ldcw")
+            {
+                using (var inStream = new FileStream(encryptedFilePath, FileMode.Open))
+                {
+                    using (var outStream = new FileStream(decryptedFilePath, FileMode.Create))
+                    {
+                        WriteToConsole("[DEC] Decrypting file " + encryptedFileInfo.Name + "...");
 
-						else if (encryptedFileInfo.Extension == ".ldcw")
-						{
-								using (var inStream = new FileStream(encryptedFilePath, FileMode.Open))
-								{
-										using (var outStream = new FileStream(decryptedFilePath, FileMode.Create))
-										{
-												WriteToConsole("[DEC] Decrypting file " + encryptedFileInfo.Name + "...");
+                        byte[] array = new byte[63];
+                        int num = inStream.Read(array, 0, 63);
+                        byte[] array2 = new byte[63];
 
-												byte[] array = new byte[63];
-												int num = inStream.Read(array, 0, 63);
-												byte[] array2 = new byte[63];
+                        for (int i = 0; i < num; i++)
+                        {
+                            array2[i] = (byte)~array[i];
+                        }
 
-												for (int i = 0; i < num; i++)
-												{
-														array2[i] = (byte)~array[i];
-												}
+                        outStream.Write(array2, 0, array2.Length);
 
-												outStream.Write(array2, 0, array2.Length);
+                        while ((inStream.Length - inStream.Position) >= buffer.Length)
+                        {
+                            if (ct.IsCancellationRequested)
+                            {
+                                WriteToConsole("[CAN] Cancelling Task: " + Path.GetFileName(decryptedFilePath), Color.Red);
 
-												while ((inStream.Length - inStream.Position) >= buffer.Length)
-												{
-														if (ct.IsCancellationRequested)
-														{
-																WriteToConsole("[CAN] Cancelling Task: " + Path.GetFileName(decryptedFilePath), Color.Red);
+                                outStream.Flush();
+                                outStream.Close();
+                                inStream.Close();
+                                buffer = null;						
+                            }
 
-																outStream.Flush();
-																outStream.Close();
-																inStream.Close();
-																buffer = null;
-																//throw new TaskCanceledException();							
-														}
+                            inStream.Read(buffer, 0, buffer.Length);
+                            outStream.Write(buffer, 0, buffer.Length);
+                        }
 
-														inStream.Read(buffer, 0, buffer.Length);
-														outStream.Write(buffer, 0, buffer.Length);
-												}
+                        buffer = new byte[inStream.Length - inStream.Position];
+                        inStream.Read(buffer, 0, buffer.Length);
+                        outStream.Write(buffer, 0, buffer.Length);
 
-												buffer = new byte[inStream.Length - inStream.Position];
-												inStream.Read(buffer, 0, buffer.Length);
-												outStream.Write(buffer, 0, buffer.Length);
+                        outStream.Flush();
+                        outStream.Close();
 
-												outStream.Flush();
-												outStream.Close();
+                        WriteToConsole("[DEC] File decryption completed: " + decryptedFilePath, Color.DarkGreen);
+                    }
 
-												WriteToConsole("[DEC] File decryption completed: " + decryptedFilePath, Color.DarkGreen);
-										}
+                    inStream.Close();
+                    buffer = null;
+                }
 
-										inStream.Close();
-										buffer = null;
-								}
+                if (ProgressPercent != null)
+                {
+                    FilesCompleted++;
+                    int percent = FilesCompleted * 100 / TotalFiles;
+                    ProgressPercent.Report(percent);
+                }
+            }
 
-								if (ProgressPercent != null)
-								{
-										FilesCompleted++;
-										int percent = FilesCompleted * 100 / TotalFiles;
-										ProgressPercent.Report(percent);
-								}
-						}
-
-						if (Options.SubTitle)
-								ConvertSub(encryptedFilePath, decryptedFilePath, Options.RemoveFilesAfterDecryption);
+            if (Options.SubTitle)
+                ConvertSub(encryptedFilePath, decryptedFilePath, Options.RemoveFilesAfterDecryption);
 
             if (Options.RemoveFilesAfterDecryption)
                 encryptedFileInfo.Delete();
@@ -397,18 +394,18 @@ namespace LyndaDecryptorUI
             try
             {
                 SQLiteCommand cmd = DatabaseConnection.CreateCommand();
-								int? chapterID = null;
+                int? chapterID = null;
 
-								// Query all required tables and fields from the database
-								cmd.CommandText = @"SELECT Video.ID, Video.ChapterId, Video.CourseId, 
-                                           Video.Title, Filename, Course.Title as CourseTitle, 
-                                           Video.SortIndex, Chapter.Title as ChapterTitle, 
-                                           Chapter.SortIndex as ChapterIndex 
-                                    FROM Video, Course, Chapter 
-                                    WHERE Video.ChapterId = Chapter.ID
-                                    AND Course.ID = Video.CourseId 
-                                    AND Video.CourseId = @courseId 
-                                    AND Video.ID = @videoId";
+                // Query all required tables and fields from the database
+                cmd.CommandText = @"SELECT Video.ID, Video.ChapterId, Video.CourseId, 
+                    Video.Title, Filename, Course.Title as CourseTitle, 
+                    Video.SortIndex, Chapter.Title as ChapterTitle, 
+                    Chapter.SortIndex as ChapterIndex 
+                    FROM Video, Course, Chapter 
+                    WHERE Video.ChapterId = Chapter.ID
+                    AND Course.ID = Video.CourseId 
+                    AND Video.CourseId = @courseId 
+                    AND Video.ID = @videoId";
 
                 cmd.Parameters.Add(new SQLiteParameter("@courseId", courseID));
                 cmd.Parameters.Add(new SQLiteParameter("@videoId", videoID));
@@ -424,9 +421,9 @@ namespace LyndaDecryptorUI
                         ChapterIndex = reader.GetInt32(reader.GetOrdinal("ChapterIndex")),
                         VideoIndex = reader.GetInt32(reader.GetOrdinal("SortIndex")),
                         VideoTitle = reader.GetString(reader.GetOrdinal("Title"))
-										};
+                    };
 
-										chapterID = reader.GetInt32(reader.GetOrdinal("ChapterId"));
+                    chapterID = reader.GetInt32(reader.GetOrdinal("ChapterId"));
 
                     if (videoInfo.ChapterTitle.Contains("."))
                         videoInfo.ChapterTitle = videoInfo.ChapterTitle.Split('.')[1].Trim();
@@ -434,48 +431,48 @@ namespace LyndaDecryptorUI
                     videoInfo.ChapterTitle = videoInfo.ChapterIndex > 9 ? $"{videoInfo.ChapterIndex} - {videoInfo.ChapterTitle}" : $"0{videoInfo.ChapterIndex} - {videoInfo.ChapterTitle}";
                     videoInfo.VideoID = videoID;
                     videoInfo.CourseID = courseID;
-								}
+                }
 
-								//Extra Code to get Correct Serial No. of the Video stored in VideoPrefix
+                //Extra Code to get Correct Serial No. of the Video stored in VideoPrefix
 
-								int? FirstVideoSortIndex = null;
+                int? FirstVideoSortIndex = null;
 
-								if (chapterID.HasValue)
-								{
-										cmd = DatabaseConnection.CreateCommand();
+                if (chapterID.HasValue)
+                {
+                    cmd = DatabaseConnection.CreateCommand();
 
-										cmd.CommandText = @"SELECT Video.SortIndex
-																				FROM Video
-																				WHERE Video.ChapterId = @chapterID
-																				ORDER BY Video.SortIndex";
+                    cmd.CommandText = @"SELECT Video.SortIndex
+                                        FROM Video
+                                        WHERE Video.ChapterId = @chapterID
+                                        ORDER BY Video.SortIndex";
 
-										cmd.Parameters.Add(new SQLiteParameter("@chapterID", chapterID));
+                    cmd.Parameters.Add(new SQLiteParameter("@chapterID", chapterID));
 
-										reader = cmd.ExecuteReader();
+                    reader = cmd.ExecuteReader();
 
-										if (reader.Read())
-										{
-												FirstVideoSortIndex = reader.GetInt32(reader.GetOrdinal("SortIndex"));
-										}
-								}
+                    if (reader.Read())
+                    {
+                        FirstVideoSortIndex = reader.GetInt32(reader.GetOrdinal("SortIndex"));
+                    }
+                }
 
-								if (FirstVideoSortIndex.HasValue)
-								{
-										int SerialNo = videoInfo.VideoIndex - (int)FirstVideoSortIndex + 1;
-										videoInfo.VideoPrefix = SerialNo < 10 ? "0" + SerialNo : SerialNo.ToString();
-								}
-								else
-								{
-										//Debug.WriteLine("FirstVideoSortIndex = " + FirstVideoSortIndex);
-										videoInfo.VideoPrefix = videoInfo.VideoIndex.ToString();
-								}
+                if (FirstVideoSortIndex.HasValue)
+                {
+                    int SerialNo = videoInfo.VideoIndex - (int)FirstVideoSortIndex + 1;
+                    videoInfo.VideoPrefix = SerialNo < 10 ? "0" + SerialNo : SerialNo.ToString();
+                }
+                else
+                {
+                    //Debug.WriteLine("FirstVideoSortIndex = " + FirstVideoSortIndex);
+                    videoInfo.VideoPrefix = videoInfo.VideoIndex.ToString();
+                }
 
-								//###############################################################################
-						}
-						catch (Exception e)
+                //###############################################################################
+            }
+            catch (Exception e)
             {
                 WriteToConsole($"[ERR] Exception occured during db query ({courseID}/{videoID}): {e.Message}", Color.Yellow);
-								videoInfo = null;
+                videoInfo = null;
             }
 
             return videoInfo;
