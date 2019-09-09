@@ -64,11 +64,11 @@ namespace LyndaDecryptorUI
             Options = options;
 
             if (options.UseDatabase)
-                Options.UseDatabase = InitDB(options.DatabasePath);
+               Options.UseDatabase = InitDB(options.DatabasePath);
 
-                        ProgressPercent = pp;
-                        ct = token;
-                }
+            ProgressPercent = pp;
+            ct = token;
+        }
 
         #region Methods
 
