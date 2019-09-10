@@ -25,10 +25,8 @@ namespace LyndaDecryptorUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>C:\Users\Jagandeep\AppData\Local\lynda.com\Lynda.com Desktop App\offline\ldc_dl_courses\</string>
-</ArrayOfString>")]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
         public global::System.Collections.Specialized.StringCollection InputLocation {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["InputLocation"]));
@@ -41,8 +39,7 @@ namespace LyndaDecryptorUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>C:\\Temp\\Lynda</string>\r\n  <string>C:\\Temp\\</string>\r\n</ArrayOfString>")]
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
         public global::System.Collections.Specialized.StringCollection OutputLocation {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["OutputLocation"]));
@@ -54,10 +51,8 @@ namespace LyndaDecryptorUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>C:\Users\Jagandeep\AppData\Local\lynda.com\Lynda.com Desktop App\db.sqlite</string>
-</ArrayOfString>")]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
         public global::System.Collections.Specialized.StringCollection DatabaseFile {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["DatabaseFile"]));
