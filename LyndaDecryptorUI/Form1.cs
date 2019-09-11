@@ -269,12 +269,14 @@ namespace LyndaDecryptorUI
             string InputFolder;
             int i, count;
 
-            count = ComboInputPath.Items.Count;
+            count = Settings.Default.InputLocation.Count;
 
-            if (Directory.Exists(Settings.Default.InputLocation[0]))
+            if (count > 0 && Directory.Exists(Settings.Default.InputLocation[0]))
                 InputFolder = Settings.Default.InputLocation[0];
             else
                 InputFolder = DEFAULT_INPUT_FOLDER;
+
+            count = ComboInputPath.Items.Count;
 
             if (RadioFolder.Checked == true)
             {
@@ -339,12 +341,12 @@ namespace LyndaDecryptorUI
 
         private void CmdBrowseOutput_Click(object sender, EventArgs e)
         {
-            int i, count;
-            count = ComboOutputPath.Items.Count;
-
             string OutputFolder;
+            int count;
 
-            if (Directory.Exists(Settings.Default.OutputLocation[0]))
+            count = Settings.Default.OutputLocation.Count;
+
+            if (count > 0 && Directory.Exists(Settings.Default.OutputLocation[0]))
                 OutputFolder = Settings.Default.OutputLocation[0];
             else
                 OutputFolder = DEFAULT_OUTPUT_FOLDER;
@@ -357,10 +359,12 @@ namespace LyndaDecryptorUI
 
             // Show the FolderBrowserDialog.  
             DialogResult result = FolderDlg.ShowDialog();
-         
+
+            count = ComboOutputPath.Items.Count;
+
             if (result == DialogResult.OK)
             {
-                for (i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     if (ComboOutputPath.Items[i].ToString() == FolderDlg.SelectedPath)
                     {
@@ -375,7 +379,7 @@ namespace LyndaDecryptorUI
                 {
                         count = ComboOutputPath.Items.Count - NUM_FAVOURITES;
 
-                        for (i = 0; i < count; i++)
+                        for (int i = 0; i < count; i++)
                                 ComboOutputPath.Items.RemoveAt(ComboOutputPath.Items.Count - 1);
                 }
 
@@ -385,12 +389,12 @@ namespace LyndaDecryptorUI
 
         private void CmdBrowseDB_Click(object sender, EventArgs e)
         {
-            int i, count;
-            count = ComboDbFile.Items.Count;
-
             string DbFolder;
+            int count;
 
-            if (Directory.Exists(Settings.Default.DatabaseFile[0]))
+            count = Settings.Default.DatabaseFile.Count;
+       
+            if (count > 0 && Directory.Exists(Settings.Default.DatabaseFile[0]))
                 DbFolder = Settings.Default.DatabaseFile[0];
             else
                 DbFolder = DEFAULT_DATABASE_FOLDER;
@@ -413,10 +417,12 @@ namespace LyndaDecryptorUI
 
             // Show the FolderBrowserDialog.  
             DialogResult result = FileDlg.ShowDialog();
-                    
+
+            count = ComboDbFile.Items.Count;
+
             if (result == DialogResult.OK)
             {
-                for (i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     if (ComboDbFile.Items[i].ToString() == FileDlg.FileName)
                     {
@@ -431,7 +437,7 @@ namespace LyndaDecryptorUI
                 {
                     count = ComboDbFile.Items.Count - NUM_FAVOURITES;
 
-                    for (i = 0; i < count; i++)
+                    for (int i = 0; i < count; i++)
                         ComboDbFile.Items.RemoveAt(ComboDbFile.Items.Count - 1);
                 }
 
