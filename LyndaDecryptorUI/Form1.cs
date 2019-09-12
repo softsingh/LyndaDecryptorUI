@@ -180,6 +180,8 @@ namespace LyndaDecryptorUI
                 SubTitle = ChkSubtitle.Checked ? true : false
             };
 
+            CmdStartDecryption.Text = "Decrypting....";
+            CmdStartDecryption.Enabled = false;
             CmdExit.Text = "Cancel";
             running = true;
             cts = new CancellationTokenSource();
@@ -209,6 +211,7 @@ namespace LyndaDecryptorUI
             finally
             {
                 CmdStartDecryption.Text = "Start Decryption";
+                CmdStartDecryption.Enabled = true;
                 CmdExit.Text = "Exit";
                 running = false;
                 cts.Dispose();
