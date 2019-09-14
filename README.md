@@ -13,3 +13,8 @@ Lynda Desktop Video Decryptor with Graphical User Interface. This application is
 - Browse Database File if Use Database option has been checked
 - Finally hit **Start Decryption** to decrypt the video(s)
 - Optionally hit **Favorites** buttons to Add/Remove your favorite locations
+
+## Download
+Download [Portable Version (no installation required)]([https://github.com/softsingh/LyndaDecryptorUI/releases/download/portable/LyndaDecryptorUI.zip)  
+or  
+Download [Setup File](https://github.com/softsingh/LyndaDecryptorUI/releases/download/installer/LyndaDecryptorUI_Setup.zip)
