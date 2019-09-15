@@ -19,4 +19,6 @@ Download the [Portable Version](https://github.com/softsingh/LyndaDecryptorUI/re
 
 ## How to Compile
 - Open **LyndaDecryptorUI.sln** in Visual Studio
-- Install **System.Data.SQLite** NuGet package (Tools -> NuGet Package Manager -> Manage Nuget Packages for Solution)
+- Restore/Install **System.Data.SQLite** NuGet package (Tools -> NuGet Package Manager -> Manage Nuget Packages for Solution)
+- Save changes, close solution and reload it again
+- Change current configuration to **Release** and hit **Start** to compile and run
