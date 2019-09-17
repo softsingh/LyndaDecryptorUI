@@ -15,7 +15,7 @@ Lynda Desktop Video Decryptor with Graphical User Interface. This application is
 - Optionally hit **Favorites** buttons to Add/Remove your favorite locations
 
 ## Download
-Download the [Portable Version](https://github.com/softsingh/LyndaDecryptorUI/releases/download/portable/LyndaDecryptorUI.zip) or [Setup File](https://github.com/softsingh/LyndaDecryptorUI/releases/download/installer/LyndaDecryptorUI_Setup.zip)
+Download the [Portable Version](https://github.com/softsingh/LyndaDecryptorUI/releases/download/portable/LyndaDecryptorUI.zip) or [Setup File](https://github.com/softsingh/LyndaDecryptorUI/releases/download/installer/LyndaDecryptorUI.Setup.exe)
 
 ## How to Compile
 - Open **LyndaDecryptorUI.sln** in Visual Studio
