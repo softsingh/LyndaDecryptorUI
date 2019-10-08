@@ -7,11 +7,11 @@ using static LyndaDecryptorUI.Utils;
 
 namespace LyndaDecryptorUI
 {
-    public partial class FrmFavorites : Form
+    public partial class frmFavorites : Form
     {
         FavoriteType FavType;
 
-        public FrmFavorites(FavoriteType ft)
+        public frmFavorites(FavoriteType ft)
         {
             InitializeComponent();
             FavType = ft;

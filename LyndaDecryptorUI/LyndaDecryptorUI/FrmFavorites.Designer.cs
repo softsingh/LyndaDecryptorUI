@@ -1,6 +1,6 @@
 ﻿namespace LyndaDecryptorUI
 {
-	partial class FrmFavorites
+	partial class frmFavorites
 	{
 		/// <summary>
 		/// Required designer variable.

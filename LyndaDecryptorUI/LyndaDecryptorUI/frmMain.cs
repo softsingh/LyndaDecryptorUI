@@ -30,13 +30,13 @@ namespace LyndaDecryptorUI
         public Color TextColor;
     };
 
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
                 
         CancellationTokenSource cts;
         CancellationToken ct;
 
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
 
@@ -450,7 +450,7 @@ namespace LyndaDecryptorUI
 
         private void CmdInputFavorites_Click(object sender, EventArgs e)
         {
-            FrmFavorites MyFrmFavorites = new FrmFavorites(FavoriteType.Input);
+            frmFavorites MyFrmFavorites = new frmFavorites(FavoriteType.Input);
             MyFrmFavorites.ShowDialog();
             UpdateComboBox(FavoriteType.Input);
         }
@@ -462,14 +462,14 @@ namespace LyndaDecryptorUI
 
         private void CmdOutputFavorites_Click(object sender, EventArgs e)
         {
-            FrmFavorites MyFrmFavorites = new FrmFavorites(FavoriteType.Output);
+            frmFavorites MyFrmFavorites = new frmFavorites(FavoriteType.Output);
             MyFrmFavorites.ShowDialog();
             UpdateComboBox(FavoriteType.Output);
         }
 
         private void CmdDatabaseFavorites_Click(object sender, EventArgs e)
         {
-            FrmFavorites MyFrmFavorites = new FrmFavorites(FavoriteType.Database);
+            frmFavorites MyFrmFavorites = new frmFavorites(FavoriteType.Database);
             MyFrmFavorites.ShowDialog();
             UpdateComboBox(FavoriteType.Database);
         }

@@ -138,17 +138,17 @@
     <Compile Include="CaptionToSrt.cs" />
     <Compile Include="Decryptor.cs" />
     <Compile Include="DecryptorOptions.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="frmMain.designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmFavorites.cs">
+    <Compile Include="frmFavorites.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmFavorites.Designer.cs">
-      <DependentUpon>FrmFavorites.cs</DependentUpon>
+    <Compile Include="frmFavorites.Designer.cs">
+      <DependentUpon>frmFavorites.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -160,11 +160,11 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VideoInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmFavorites.resx">
-      <DependentUpon>FrmFavorites.cs</DependentUpon>
+    <EmbeddedResource Include="frmFavorites.resx">
+      <DependentUpon>frmFavorites.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
